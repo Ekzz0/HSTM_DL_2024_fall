@@ -1,6 +1,4 @@
 import argparse
-import os
-import sys
 
 import pandas as pd
 import torch
@@ -8,16 +6,7 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
-
-from homeworks.hw1.config import (
-    batch_size,
-    learning_rate,
-    model_params,
-    num_epoches,
-    target,
-    useless_columns,
-)
+from homeworks.hw1.config import batch_size, learning_rate, model_params, num_epoches, target, useless_columns
 from homeworks.hw1.model import MLP
 from homeworks.hw1.scripts import convert_to_tensor, set_seed, split_df
 
@@ -55,7 +44,6 @@ def evaluate(model, X, y):
         predictions = model.predict(X).cpu().numpy()
         y = y.cpu().numpy()
 
-        # Вычисляем матрицу ошибок
         accuracy = accuracy_score(y_true=y, y_pred=predictions)
         conf_matrix = confusion_matrix(y_true=y, y_pred=predictions)
 
@@ -106,7 +94,6 @@ def train(model, criterion, optimizer, X_train, y_train, epochs, batch_size, X_v
                 f"Epoch {epoch}: Train Loss: {round(train_loss, 4)}"
                 f"| Epoch {epoch}: Validation Loss: {round(val_loss, 4)}"
             )
-
     return train_losses, val_losses
 
 
@@ -126,11 +113,11 @@ def main(args):
     model, criterion, optimizer = init_model(model_params, args.lr)
 
     # Train model
-    _, _ = train(model, criterion, optimizer, X_train, y_train, args.num_epoches, args.batch_size, X_val, y_val)
+    train(model, criterion, optimizer, X_train, y_train, args.num_epoches, args.batch_size, X_val, y_val)
 
     # Predict on val set
     predictions_val, accuracy_val, conf_matrix_val = evaluate(model, X_val, y_val)
-    
+
     report = classification_report(y_true=y_val.cpu().numpy(), y_pred=predictions_val)
     print(report)
     print(f"accuracy: {accuracy_val}")

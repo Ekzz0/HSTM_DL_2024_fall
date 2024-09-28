@@ -1,7 +1,3 @@
-import os
-from enum import Enum
-
-root_path = os.getcwd()
 target = "order0"
 useless_columns = ["order1", "order2"]
 
@@ -16,11 +12,3 @@ model_params = {
     "in_features": 360,
     "out_features": 3,
 }
-
-
-class Paths(str, Enum):
-    """Enum с путями"""
-
-    train_path: str = os.path.join(root_path, "homeworks", "hw1", "data", "train.csv")
-    val_path: str = os.path.join(root_path, "homeworks", "hw1", "data", "val.csv")
-    test_path: str = os.path.join(root_path, "homeworks", "hw1", "data", "test.csv")
